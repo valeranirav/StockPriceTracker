@@ -9,9 +9,24 @@ import Foundation
 
 final class StockListViewModel: ObservableObject {
     @Published private(set) var tickerSymbols: [StockSymbolModel] = []
-   
-    init() {
+    @Published var isRunning: Bool = false
+    
+    private let webSocketManager: WebSocketProtocol
+    
+    init(webSocketManager: WebSocketProtocol) {
+        self.webSocketManager = webSocketManager
         setupSymbols()
+    }
+    
+    func start() {
+        guard !isRunning else { return }
+        webSocketManager.connect()
+        isRunning = true        
+    }
+
+    func stop() {
+        isRunning = false
+        webSocketManager.disconnect()
     }
 
     private func setupSymbols() {

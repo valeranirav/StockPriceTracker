@@ -9,25 +9,54 @@ import SwiftUI
 
 struct StockListView: View {
     @EnvironmentObject var stockListViewModel: StockListViewModel
+    @EnvironmentObject var webSocketManager: WebSocketManager
     @State private var tickerSymbols: [StockSymbolModel] = []
     
     var body: some View {
-        ScrollView {
-            LazyVStack(alignment: .leading, spacing: 0) {
-                ForEach(tickerSymbols) { tickerSymbol in
-                    NavigationLink(value: tickerSymbol) {
-                        StockListRowView(symbolModel: tickerSymbol)
-                            .padding(.vertical, 8)
+        VStack {
+            topBar
+            
+            ScrollView {
+                LazyVStack(alignment: .leading, spacing: 0) {
+                    ForEach(tickerSymbols) { tickerSymbol in
+                        NavigationLink(value: tickerSymbol) {
+                            StockListRowView(symbolModel: tickerSymbol)
+                                .padding(.vertical, 8)
+                        }
+                        Divider()
                     }
-                    Divider()
                 }
+                .padding(.horizontal)
             }
-            .padding(.horizontal)
+            .navigationTitle("Stocks")
         }
-        .navigationTitle("Stocks")
         .onAppear() {
             self.tickerSymbols = stockListViewModel.tickerSymbols
         }
+    }
+    
+    private var topBar: some View {
+        HStack {
+            Text(webSocketManager.isConnected ? "🟢 Connected" : "🔴 Disconnected")
+                .font(.subheadline)
+                .padding(.leading, 8)
+            Spacer()
+            Button(action: {
+                if stockListViewModel.isRunning {
+                    stockListViewModel.stop()
+                } else {
+                    stockListViewModel.start()
+                }
+            }) {
+                Text(stockListViewModel.isRunning ? "Stop" : "Start")
+                    .bold()
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 8)
+                    .background(RoundedRectangle(cornerRadius: 8).stroke())
+            }
+            .padding(.trailing, 8)
+        }
+        .padding(.vertical, 6)
     }
 }
 
