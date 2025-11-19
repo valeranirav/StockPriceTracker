@@ -10,11 +10,13 @@ import SwiftUI
 @main
 struct StockPriceTrackerApp: App {
     @State private var path = NavigationPath()
+    @StateObject private var stockListViewModel = StockListViewModel()
     
     var body: some Scene {
         WindowGroup {
             NavigationStack(path: $path) {
                 StockListView()
+                    .environmentObject(stockListViewModel)
                     .navigationDestination(for: StockSymbolModel.self) { symbol in
                         StockDetailsView(model: symbol)
                     }

@@ -8,10 +8,9 @@
 import SwiftUI
 
 struct StockListView: View {
-    @State private var tickerSymbols: [StockSymbolModel] = [StockSymbolModel(symbol: "AAPL", price: 124.56),
-                                                            StockSymbolModel(symbol: "GOOG", price: 124.56),
-                                                            StockSymbolModel(symbol: "AMZN", price: 124.56),
-                                                            StockSymbolModel(symbol: "NVDA", price: 124.56)]
+    @EnvironmentObject var stockListViewModel: StockListViewModel
+    @State private var tickerSymbols: [StockSymbolModel] = []
+    
     var body: some View {
         ScrollView {
             LazyVStack(alignment: .leading, spacing: 0) {
@@ -26,6 +25,9 @@ struct StockListView: View {
             .padding(.horizontal)
         }
         .navigationTitle("Stocks")
+        .onAppear() {
+            self.tickerSymbols = stockListViewModel.tickerSymbols
+        }
     }
 }
 
