@@ -20,6 +20,20 @@ struct StockPriceTrackerApp: App {
                     .environmentObject(stockListViewModel)
                     .environmentObject(webSocketManager)
                     .environmentObject(ThemeManager())
+                    .onOpenURL { url in
+                        
+                        guard url.scheme == "stocks",
+                              url.host == "symbol" else { return }
+                        
+                        let symbol = url.lastPathComponent.uppercased()
+                        
+                        if let s = stockListViewModel.tickerSymbols.first(where: { $0.tickerSymbol == symbol }) {
+                            path.append(s)
+                        } else {
+                            let placeholder = StockSymbolModel(symbol: symbol, price: 0)
+                            path.append(placeholder)
+                        }
+                    }
                     .navigationDestination(for: StockSymbolModel.self) { symbol in
                         StockDetailsView(model: symbol)
                             .environmentObject(ThemeManager())
