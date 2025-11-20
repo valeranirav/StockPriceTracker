@@ -9,6 +9,9 @@ import Foundation
 import Combine
 
 protocol WebSocketProtocol: AnyObject {
+    var incomingPublisher: AnyPublisher<StockUpdateModel, Never> { get }
+    
     func connect()
     func disconnect()
+    func send(update: StockUpdateModel)
 }

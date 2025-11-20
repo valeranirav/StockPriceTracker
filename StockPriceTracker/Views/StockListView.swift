@@ -33,6 +33,11 @@ struct StockListView: View {
         .onAppear() {
             self.tickerSymbols = stockListViewModel.tickerSymbols
         }
+        .onChange(of: stockListViewModel.tickerSymbols, initial: false) { oldSymbols, newSymbols  in
+            if oldSymbols != newSymbols {
+                self.tickerSymbols = newSymbols
+            }
+        }
     }
     
     private var topBar: some View {

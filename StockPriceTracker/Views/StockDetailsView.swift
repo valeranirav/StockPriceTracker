@@ -38,8 +38,19 @@ struct StockDetailsView: View {
             Text(String(format: "%.2f", symbolModel.price))
                 .font(.title)
                 .bold()
-            Text("↑")
-                .foregroundColor(.green)
+                .modifier(FlashModifier(flash: symbolModel.priceArrow))
+            if let prev = symbolModel.previousPrice {
+                if symbolModel.price > prev {
+                    Text("↑")
+                        .foregroundColor(.green)
+                } else if symbolModel.price < prev {
+                    Text("↓")
+                        .foregroundColor(.red)
+                } else {
+                    Text("—")
+                        .foregroundColor(.secondary)
+                }
+            }
         }
     }
     

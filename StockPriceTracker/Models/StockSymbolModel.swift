@@ -6,12 +6,24 @@
 //
 import Foundation
 
+struct StockUpdateModel: Codable {
+    let symbol: String
+    let price: Double
+    let ts: String
+}
+
 final class StockSymbolModel: Identifiable, Hashable, ObservableObject {
     let id = UUID()
     let tickerSymbol: String
-    var price: Double
+    @Published var price: Double
+    @Published var previousPrice: Double?
+    @Published var priceArrow: PriceArrow = .none
     var description: String
 
+    enum PriceArrow: String, Codable {
+        case up, down, none
+    }
+    
     init(symbol: String, price: Double, description: String = "A sample description for the symbol.") {
         self.tickerSymbol = symbol
         self.price = price
@@ -19,7 +31,8 @@ final class StockSymbolModel: Identifiable, Hashable, ObservableObject {
     }
 
     static func == (lhs: StockSymbolModel, rhs: StockSymbolModel) -> Bool {
-        lhs.id == rhs.id
+        lhs.id == rhs.id &&
+        lhs.price == rhs.price
     }
 
     func hash(into hasher: inout Hasher) {
