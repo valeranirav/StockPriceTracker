@@ -19,8 +19,10 @@ struct StockPriceTrackerApp: App {
                 StockListView()
                     .environmentObject(stockListViewModel)
                     .environmentObject(webSocketManager)
+                    .environmentObject(ThemeManager())
                     .navigationDestination(for: StockSymbolModel.self) { symbol in
                         StockDetailsView(model: symbol)
+                            .environmentObject(ThemeManager())
                     }
             }
         }

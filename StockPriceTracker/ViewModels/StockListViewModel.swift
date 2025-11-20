@@ -87,10 +87,7 @@ final class StockListViewModel: ObservableObject {
                 let delta = Double.random(in: -3...3)
                 let newPrice = max(0.01, (symbol.price + delta))
                 let update = StockUpdateModel(symbol: symbol.tickerSymbol, price: newPrice, ts: ISO8601DateFormatter().string(from: Date()))
-                self.webSocketManager.send(update: update)
-                
-                // small sleep to avoid sending all at exact same nanosecond (not necessary)
-                usleep(10_000)
+                self.webSocketManager.send(update: update)                
             }
         }
     }

@@ -10,6 +10,7 @@ import SwiftUI
 struct StockListView: View {
     @EnvironmentObject var stockListViewModel: StockListViewModel
     @EnvironmentObject var webSocketManager: WebSocketManager
+    @EnvironmentObject var theme: ThemeManager
     @State private var tickerSymbols: [StockSymbolModel] = []
     
     var body: some View {
@@ -44,7 +45,7 @@ struct StockListView: View {
         HStack {
             Text(webSocketManager.isConnected ? "🟢 Connected" : "🔴 Disconnected")
                 .font(.subheadline)
-                .padding(.leading, 8)
+                .padding(.leading, 16)
             Spacer()
             Button(action: {
                 if stockListViewModel.isRunning {
